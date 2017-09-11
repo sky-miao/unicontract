@@ -1,0 +1,50 @@
+.ant-timeline{
+    //将第一个和最后一个item隐藏
+    .ant-timeline-item:last-child .ant-timeline-item-content,
+    .ant-timeline-item:first-child .ant-timeline-item-content{
+        background: #fff
+    }
+    .ant-timeline-item:first-child .ant-timeline-item-content{
+        background: #fff
+    }
+    .ant-timeline-item:last-child .ant-timeline-item-content{
+        display: flex;
+        justify-content: space-around;
+        position: relative;
+    }
+    //item里的内容
+    .ant-timeline-item-content{
+        padding: 10px 0 10px 10px;
+        margin: 0 20px 0 20px;
+        width: 150px;
+        background: #f2f6fa;
+        border-radius: 5px;
+        .item-date{
+            .date-left,.date-right{
+                display: inline-block
+            }
+            .date-left{
+                font-size: 35px;
+                margin: 0 10px 0 5px;
+            }
+        }
+    }
+}
+.ant-tabs-content{
+    width: 100%;
+}
+.ant-timeline-item-head{
+    left: 50%;
+    margin-left: -5px;
+    z-index: 100;
+}
+.ant-timeline-item-tail{
+    left: 50%;
+    z-index: 99;
+}
+.ant-timeline-item:nth-child(even) {
+    .ant-timeline-item-content{
+        position: relative;
+        left: 50%;
+    }
+}

@@ -1,0 +1,27 @@
+.app-nav{
+  display: flex;
+  // margin-top: 20px;
+  .ant-menu-submenu .ant-menu-submenu-title,
+  * {
+    font-size: 14px;
+  }
+  .ant-menu{
+    flex: 1;
+  }
+  .ant-menu-item{
+    .active{
+      // background: #FA7A27;
+      color: #fff;
+      &:before{
+        background-color: #FA7A27;
+        z-index: -1;
+      }
+    }
+  }
+}
+.ant-menu-item-selected > a,
+.ant-menu-submenu-title,
+.ant-menu-item-selected > div{
+  // color: #666;.
+  color: #fff;
+}

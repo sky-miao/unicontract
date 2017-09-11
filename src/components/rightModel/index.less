@@ -1,0 +1,57 @@
+@import '../../less/colors.less';
+.page-title{
+  border-left: 2px solid @baseColor;
+  padding: 0 10px;
+  line-height: 22px;
+}
+//页面的显示隐藏
+.isShow{
+  display: inline-block;
+}
+.isHide{
+  display: none;
+}
+.right-page{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background: #fff;
+  width: 400px;
+  // height: 100%;
+  border-left: 1px solid #ddd;
+  padding: 20px 10px;
+  border-radius: 5px 0 0 5px;
+  .content{
+    height: 100%;
+    .content-page{
+      height: 100%;
+      .sidebarx{
+        height: 100%;
+        position: relative;
+        .Kpage-content{
+          position: absolute;
+          top: 24px;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          .ant-tabs{
+            height: 100%;
+            position: relative;
+            .ant-tabs-content{
+              position: absolute;
+              top: 50px;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              .ant-tabs-tabpane{
+                overflow: auto;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
