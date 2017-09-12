@@ -5,12 +5,12 @@ import {
   combineReducers
 } from 'redux'
 import {default as user} from './user'
-import {default as placeOrder} from './place-order'
 import {default as auth} from './auth'
+import {default as limitRole} from './limit-role'
 
 export default combineReducers({
   user,
-  placeOrder,
   auth,
+  limitRole,
   routing,
 })
