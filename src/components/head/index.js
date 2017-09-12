@@ -45,13 +45,13 @@ class Head extends Component{
 //        </div>
 //      </div>
 const mapStateToProps = (state) => {
-	console.log(state)
+	// console.log(state)
   return {
     ...state.login,
   }
 }
 const mapDispatchToProps = (dispatch) => {
-	console.log(dispatch)
+	// console.log(dispatch)
   return {
     logout(){
       dispatch(logout())

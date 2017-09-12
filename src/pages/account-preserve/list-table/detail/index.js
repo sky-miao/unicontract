@@ -46,27 +46,6 @@ class NormalLoginForm extends React.Component {
 			}
 		});
 	}
-
-	// componentDidMount() {
-	// 	var par=param({
-  //     "id":this.props.id,
-	// 	})
-	// 	reqwest(
-	// 			api(url.accountPreserveInfo,par)
-	// 		).then((req) => {
-	// 		console.log(req)
-	// 		if(req.result){
-	// 			var data = req.result.data;
-	// 			for(var i = 0; i < data.length; i++) {
-  //         var roleArr = ['管理者', '设计者', '审核者', '用户'];
-	// 				data[i].role = arr[(data[i].role-1)];
-  //         data[i].effect=(data[i].effect?"生效":"不生效")
-	// 			}
-	// 			this.setState({
-	// 				data: data,
-	// 			})
-	// 		}
-	// }
 	render() {
 	let {} = this.state
 		const {
@@ -82,7 +61,7 @@ class NormalLoginForm extends React.Component {
 	        sm: { span: 14 },
 	      },
 	    };
-        const tailFormItemLayout = {
+      const tailFormItemLayout = {
 	      wrapperCol: {
 	        xs: {
 	          span: 24,

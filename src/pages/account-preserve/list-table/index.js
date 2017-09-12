@@ -142,43 +142,6 @@ export default class App extends Component {
 			pagination: pager,
 		});
 	}
-//	获取数据
-	// getData(status){
-	// 	var par=param({
-	// 		"status": -1,
-	// 		"pageNum": 1,
-	// 		"pageSize": 100,
-	// 	})
-	// 	reqwest(
-	// 			api(url.accountPreserveQuery,par)
-	// 		).then((req) => {
-	// 		console.log(req)
-	// 		if(req.result){
-
-	// 			var data = req.result.data;
-			// 	this.props.onInfo(data)
-	// 			for(var i = 0; i < data.length; i++) {
-	// 				var arr = ['创建中', '审核中', '修改中', '等待发布', '已发布'];
-	// 				data[i].status = arr[data[i].status];
-	// 			}
-	// 			this.setState({
-	// 				data: data,
-	// 			})
-	// 		}
-	// 	});
-	// }
-	// componentDidMount() {
-	// 	this.getData(-1)
-	// }
-	// componentWillReceiveProps(props) {
-	// 	if(props.isUpdate.update){
-	// 		console.log(props.isUpdate.update);
-	// 		this.getData(-1)
-	// 	}
-	// 	if(props.searchParams){
-	// 		console.log(props.searchParams)
-	// 	}
-	// }
 	handleDetailOk = (e) => {
     this.setState({
       detailVisible: false,

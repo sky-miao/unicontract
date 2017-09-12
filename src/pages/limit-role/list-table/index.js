@@ -1,38 +1,39 @@
 import './index.less'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Modal, Table, Icon, Button  } from 'antd';
+import { Modal, Table, Icon, Button, Form, Input  } from 'antd';
 import reqwest from 'reqwest';
 import $ from 'jquery';
 const { Columns } = Table;
 import { api } from '../../../common/api_server'
 import { url } from '../../../common/url_api'
 import { param }from '../../../common/param'
-import DetailForm from './detail'
-import InfoForm from './info'
-import { actionRoleList } from '../../../actions/limit-role'
+import EditModal from '../role-edit'
+import InfoForm from '../role-auth'
+import { actionLimitRoleSearch } from '../../../actions/limit-role'
 const confirm = Modal.confirm;
+const FormItem = Form.Item;
 
 class Role extends Component {
 	constructor(props) {
 		super()
 		this.state = {
-			id:"12342340980",
-			detailVisible:false,
-			editVisible:false,
+			showEditModal:false,
+			showAuthModal:false,
+			roleInfo: {},
 			total: 20,
 			loading: false,
 			pagination: {
 				current: 1,
 				total: 0,
-				pageSize: 6,
+				pageSize: 1,
 			},
 		}
 		this.columns = [{
 			title: '角色ID',
 			dataIndex: 'roleId',
 			key: 'roleId',
-			width: '10%',
+			width: '20%',
 		}, {
 			title: '角色名称',
 			dataIndex: 'roleName',
@@ -47,46 +48,97 @@ class Role extends Component {
 			title: '操作',
 			dataIndex: 'handle',
 			width: '20%',
-			render: (record, index, e) => (
+			render: (text, record) => (
 				<span>
-			      <a  onClick={this.handleEdit.bind(this, record,index)}>编辑</a>
+			      <a  onClick={this.handleEdit.bind(this, text, record)}>编辑</a>
 			      <span className="ant-divider" />
-			      <a  disabled = { index.status =="创建中" ? 'disabled' : "" }  onClick={this.handleDetail.bind(this, record,index)}>权限</a>
+			      <a  onClick={this.handleDetail.bind(this, text, record)}>权限</a>
 			      <span className="ant-divider" />
-			      <a  style={{"disable":""}} onClick={this.handelOff.bind(this, record,index)}>删除</a>
+			      <a  onClick={this.handelOff.bind(this, text, record)}>删除</a>
 			    </span>
 			),
 		}];
 	}
-
-//	编辑按钮
-	handleEdit(record, index) {
-	    this.setState({
-	      editVisible: true,
-	    });
+	render() {
+		let {getFieldDecorator} = this.props.form
+		let {showEditModal, roleInfo} = this.state
+		let { roleList } = this.props
+		return(
+			<div>
+				<Table 
+					columns={this.columns}
+	        rowKey={record => record.registered}
+	        dataSource={roleList}
+	        pagination={this.state.pagination}
+	        loading={this.state.loading}
+					onChange={this.handleTableChange.bind(this)}
+	      />
+				<EditModal
+            show={showEditModal}
+            roleInfo={roleInfo}
+            onCancel={() => {
+              this.setState({
+                showEditModal: false,
+              })
+            }}
+            onConfirm={this.handleEditRole.bind(this)}  //点击编辑的确认
+        />
+        <Modal
+          title="查看详细"
+          visible={this.state.showAuthModal}
+          onOk={this.handleDetailOk}
+          onCancel={this.handleDetailCancel}
+          okText="确定"
+          cancelText="取消"
+          ref="detailModal"
+        >
+					<InfoForm id={this.state.id}/>
+        </Modal>
+			</div>
+		);
 	}
-//	查看详细按钮
-	handleDetail(record, index) {
-		console.log(index);
-		// index.suggestion = index.suggestion ||  ('未查询到建议信息!')
-	    this.setState({
-	      detailVisible: true,
-	      // msgs:index.suggestion,
-	      // msgTitle:index.name
-	    });
-		// console.log(this.refs.suggestCon)
+	submitEdit(){
+
+	}
+	handleCancel(){
+
 	}
 
-//	注销按钮
-	handelOff(record, index) {
+	//	编辑按钮
+	handleEdit(text, record) {
+		this.setState({
+			showEditModal: true,
+			roleInfo: record,
+		});
+	}
+	handleEditRole() {
+    this.setState({
+      showEditModal: false,
+      pagination: {
+        ...this.state.pagination,
+        pager: 1,
+      }
+    })
+    this.fetchData()
+	}
+	
+	//	查看详细按钮
+	handleDetail(record) {
+			this.setState({
+				showAuthModal: true,
+				roleInfo: record,
+			});
+	}
+	//	删除按钮
+	handelOff(text, record) {
 		confirm({
-			title: '您确定要注销此账户?',
-			content: '注销后将删除账户所有信息',
+			title: '您确定要删除此角色?',
+			content: '删除后将删除角色所有信息',
 			okText: '确定',
 			okType: 'danger',
 			cancelText: '取消',
 			onOk() {
-				console.log(index);
+				console.log(record.roleId, 'roleId')
 				// var par=param({"id":index.id})
 				// reqwest(
 				// 	api(url.accountPreserveOff,par)
@@ -104,7 +156,7 @@ class Role extends Component {
 			},
 		});
 	}
-//分页 筛选状态
+	//分页 筛选状态
 	handleTableChange = (pagination, filters, sorter) => {
 		const pager = { ...this.state.pagination
 		};
@@ -115,64 +167,26 @@ class Role extends Component {
 	}
 
 	componentDidMount() {
-		this.props.fetchDate()
+		this.props.fetchData()
 	}
 
 	handleDetailOk = (e) => {
-    this.setState({
-      detailVisible: false,
-    });
-  }
-  handleDetailCancel = (e) => {
-    this.setState({
-      detailVisible: false,
-    });
-  }
-	 handleEditOk = (e) => {
-    this.setState({
-      editVisible: false,
-    });
-  }
-  handleEditCancel = (e) => {
-    this.setState({
-      editVisible: false,
-    });
-  }
-
-	render() {
-		return(
-			<div>
-				<Table columns={this.columns}
-	        rowKey={record => record.registered}
-	        dataSource={this.props.roleList || []}
-	        pagination={this.state.pagination}
-	        loading={this.state.loading}
-	      />
-        <Modal
-          title="查看详细"
-          visible={this.state.detailVisible}
-          onOk={this.handleDetailOk}
-          onCancel={this.handleDetailCancel}
-          okText="确定"
-          cancelText="取消"
-          ref="detailModal"
-        >
-					<InfoForm id={this.state.id}/>
-        </Modal>
-        <Modal
-          title="编辑"
-          visible={this.state.editVisible}
-          onOk={this.handleEditOk}
-          onCancel={this.handleEditCancel}
-          okText="确定"
-          cancelText="取消"
-          ref="editModal"
-        >
-					<DetailForm id={this.state.id}/>
-        </Modal>
-			</div>
-		);
+		this.setState({
+			showAuthModal: false,
+		});
 	}
+	handleDetailCancel = (e) => {
+		this.setState({
+			showAuthModal: false,
+		});
+	}
+	onPageChange(pagination) {
+    this.setState({
+      pagination: pagination
+    }, () => {
+      this.fetchData()
+    })
+  }
 }
 const mapStateToProps = (state) => {
   return {
@@ -181,10 +195,10 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchDate: (id, search) => {
-      actionRoleList(dispatch, search);
+    fetchData: (search) => {
+      actionLimitRoleSearch(dispatch, search);
     },
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Role)
+const RoleModal = Form.create()(Role);
+export default connect(mapStateToProps, mapDispatchToProps)(RoleModal)
